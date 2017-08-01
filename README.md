@@ -9,10 +9,10 @@
 
 ## Installation
 
-Download this repo
+Clone this repo
 
 ```
-git clone git@github.com:aramprice/dotfiles.git ~/workspace/
+git clone https://github.com/aramprice/dotfiles.git ~/workspace/
 ```
 
 Install [rcm](https://github.com/thoughtbot/rcm)
