@@ -24,5 +24,5 @@ brew install thoughtbot/formulae/rcm
 Install the dotfiles
 
 ```
-env RCRC=~/workspace/dotfiles/rcrc rcup -v
+RCRC=~/workspace/dotfiles/rcrc rcup -v
 ```
