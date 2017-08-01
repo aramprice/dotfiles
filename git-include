@@ -1,0 +1,23 @@
+[alias]
+  ci = duet-commit --verbose
+  co = checkout
+  di = diff
+  lg = log --graph --decorate=short --pretty=\"format:[%Cred%h%Creset]%d %ar by %Cblue%an%Creset. %Cgreen%s%Creset\" --find-renames=50%
+  lw = log --decorate=short --graph --color-words -w --find-renames=50%
+  st = status
+  su = submodule update --init --recursive
+
+[diff]
+  wordRegex = [^=.,()[:space:]\"]+
+
+[color]
+  ui = auto
+
+[grep]
+  lineNumber = true
+
+[push]
+  recurseSubmodules=check
+
+[url "git@github.com:"]
+  pushInsteadOf = https://github.com/

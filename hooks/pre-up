@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+GITCONFIG="${HOME}/.gitconfig"
+INCLUDE_DIRECTIVE='path="~/workspace/dotfiles/git-include"'
+
+if ! grep --quiet "${INCLUDE_DIRECTIVE}" "${GITCONFIG}" 2> /dev/null; then
+  cat << EOF >> "${GITCONFIG}"
+
+[include]
+  ${INCLUDE_DIRECTIVE}
+EOF
+fi
