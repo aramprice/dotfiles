@@ -3,26 +3,37 @@
 ## Assumptions
 
 - You are using bash
-- You have [homebrew](https://brew.sh) installed
-- You have a workspace directory
-  - `mkdir ~/workspace/`
 
 ## Installation
 
-Clone this repo
+### Install [homebrew](https://brew.sh)
 
 ```
-git clone https://github.com/aramprice/dotfiles.git ~/workspace/
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Install [rcm](https://github.com/thoughtbot/rcm)
+### Clone this repo
+
+```
+git clone https://github.com/aramprice/dotfiles.git "${HOME}/workspace/dotfiles"
+```
+
+### Install [rcm](https://github.com/thoughtbot/rcm)
 
 ```
 brew install thoughtbot/formulae/rcm
 ```
 
-Install the dotfiles
+### Install the dotfiles
 
 ```
-RCRC=~/workspace/dotfiles/rcrc rcup -v
+RCRC="${HOME}/workspace/dotfiles" rcup -v
+```
+
+## Optional
+
+### Install the specified formulae and casks
+
+```
+cd "${HOME}/workspace/dotfiles" && brew bundle
 ```
