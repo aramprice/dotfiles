@@ -1,22 +1,32 @@
-# aliases
-alias ls='ls -FG'
-alias la='ls -a'
-alias ll='ls -l'
+#!/usr/bin/env bash
 
-# macOS Settings
-macos_setup() {
-  defaults write com.apple.dock persistent-apps -array
-  defaults write com.apple.dock autohide -boolean true
-  defaults write com.apple.dock orientation -string left
+ls_opts='-F'
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+  ls_opts="${ls_opts} --color=always"
+else # macOS `ls`
+  ls_opts="${ls_opts} -G"
+fi
+
+## Aliases
+alias ack='ag'
+alias gst='git status'
+alias ls="ls ${ls_opts}"
+alias ll="ls -l ${ls_opts}"
+alias la="ls -a ${ls_opts}"
+alias sbp='source ~/.bashrc'
+
+## Functions
+pullify() {
+  git config --add remote.origin.fetch '+refs/pull/*/head:refs/remotes/origin/pr/*'
+  git fetch origin
 }
 
-# Prompt Setup
 git_branch() {
   git_dir=$(git rev-parse --show-toplevel 2>/dev/null)
 
   if [ $? -eq 0 ]; then
-    pushd ${git_dir} >/dev/null
-      branch=$(git branch --points-at=HEAD | grep -E '^\*' | tr -d '\n' | sed 's/^* //')
+    pushd "${git_dir}" >/dev/null
+      branch=$(git branch --points-at=HEAD 2>/dev/null | grep -E '^\*' | tr -d '\n' | sed 's/^* //')
       if [ "$branch" == 'no branch' ]; then
         branch=$(git rev-list --abbrev-commit --max-count=1 HEAD)
       fi
@@ -37,27 +47,81 @@ git_prompt() {
     return
   fi
 
-  if [ `git status --porcelain | wc -l` -gt 0 ]; then
+  if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
     status="${red}✗${reset_color}"
   else
     status="${green}✓${reset_color}"
   fi
 
-  echo "${reset_color}| ${green}${branch}${reset_color} ${status}"
+  echo "${reset_color}${status}${green} ${branch}${reset_color} ${reset_color}"
 }
 
 set_ps1() {
   local green="\[\e[0;32m\]"
   local purple="\[\e[0;35m\]"
-  local cyan="\[\e[0;36m\]"
+  local cyan_bold="\[\e[36;1m\]"
 
   local reset_color="\[\e[39m\]"
 
-  export PS1="\n|${cyan} $(date  +'%Y-%m-%d %H:%M:%S')${reset_color} ${purple}\h${reset_color}:${green}\w
-$(git_prompt) ${green}→${reset_color} "
-}
-PROMPT_COMMAND=set_ps1
-#/Prompt Setup
+  PS1="
+${cyan_bold}$(date +'%H:%M:%S') ${purple}\h ${reset_color}in ${green}\w
+${cyan_bold}$(git_prompt)${green}→${reset_color} "
 
-# brew configuration
-export HOMEBREW_NO_ANALYTICS=1
+  export PS1
+}
+
+## PS1
+PROMPT_COMMAND=set_ps1
+
+## PATH
+function reorder_bin_paths() {
+  local new_path=()
+  local paths
+
+  # Split path on colon
+  IFS=":" paths=(${PATH})
+
+  for path in "${paths[@]}"; do
+    # Do not include /usr/local/sbin or /usr/local/bin in their normal locations
+    if [ "/usr/local/sbin" == "${path}" ]; then
+      continue
+    fi
+    if [ "/usr/local/bin" == "${path}" ]; then
+      continue
+    fi
+
+    # Move theme to directly before their /usr/bin and /usr/sbin equivalents
+    if [ "/usr/bin" == "${path}" ]; then
+      new_path=("${new_path[@]}" "/usr/local/bin")
+    fi
+    if [ "/usr/sbin" == "${path}" ]; then
+      new_path=("${new_path[@]}" "/usr/local/sbin")
+    fi
+
+    # Every other item should be in its natural order
+    new_path=("${new_path[@]}" ${path})
+  done
+
+  # Join array on colon
+  IFS=":" echo "${new_path[*]}"
+}
+
+export PATH
+PATH=$(reorder_bin_paths)
+unset reorder_bin_paths
+
+## HISTORY
+HISTSIZE=32000
+HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend # append to hist file
+
+## Force xterm-256color
+export TERM="xterm-256color"
+
+## Golang: This has to happen after GVM otherwise GOPATH will get unset
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin
+
+## Direnv
+eval "$(direnv hook bash)"
