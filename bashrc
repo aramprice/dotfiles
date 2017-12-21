@@ -8,12 +8,13 @@ else # macOS `ls`
 fi
 
 ## Aliases
-alias ack='ag'
-alias gst='git status'
+alias brl='exec bash -l'
 alias ls="ls ${ls_opts}"
 alias ll="ls -l ${ls_opts}"
 alias la="ls -a ${ls_opts}"
-alias sbp='source ~/.bashrc'
+alias vi='vim'
+
+export EDITOR="vim"
 
 ## Functions
 pullify() {
