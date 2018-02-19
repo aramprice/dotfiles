@@ -12,6 +12,7 @@ macos_setup() {
 
 b_up() {
   brew upgrade --cleanup && \
+  brew cleanup && \
   brew doctor
 }
 
