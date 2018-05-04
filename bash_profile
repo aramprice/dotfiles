@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 macos_setup() {
   defaults write com.apple.dock persistent-apps -array
   defaults write com.apple.dock autohide -boolean true
@@ -10,14 +12,17 @@ macos_setup() {
   defaults write NSGlobalDomain com.apple.keyboard.fnState -boolean true  # enable function keys
 }
 
+# Homebrew
+export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
+
 b_up() {
-  brew upgrade --cleanup && \
+  brew upgrade && \
   brew cleanup && \
   brew doctor
 }
 
 bc_up() {
-  brew cask outdated && \
+  brew cask upgrade && \
   brew cask cleanup && \
   brew cask doctor
 }
@@ -27,4 +32,4 @@ bup() {
   bc_up
 }
 
-source ${HOME}/.bashrc
+source "${HOME}/.bashrc"
