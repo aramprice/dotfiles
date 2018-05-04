@@ -8,13 +8,14 @@ else # macOS `ls`
 fi
 
 ## Aliases
-alias brl='exec bash -l'
 alias ls="ls ${ls_opts}"
 alias ll="ls -l ${ls_opts}"
 alias la="ls -a ${ls_opts}"
+alias sbp='source ~/.bashrc'
 alias vi='vim'
+alias vim='nvim'
 
-export EDITOR="vim"
+export EDITOR='nvim'
 
 ## Functions
 pullify() {
@@ -38,10 +39,10 @@ git_branch() {
 }
 
 git_prompt() {
-  local red="\[\e[0;31m\]"
-  local green="\[\e[0;32m\]"
+  local red="\\[\\e[0;31m\\]"
+  local green="\\[\\e[0;32m\\]"
 
-  local reset_color="\[\e[39m\]"
+  local reset_color="\\[\\e[39m\\]"
 
   branch=$(git_branch)
   if [ -z "${branch}" ]; then
@@ -58,14 +59,14 @@ git_prompt() {
 }
 
 set_ps1() {
-  local green="\[\e[0;32m\]"
-  local purple="\[\e[0;35m\]"
-  local cyan_bold="\[\e[36;1m\]"
+  local green="\\[\\e[0;32m\\]"
+  local purple="\\[\\e[0;35m\\]"
+  local cyan_bold="\\[\\e[36;1m\\]"
 
-  local reset_color="\[\e[39m\]"
+  local reset_color="\\[\\e[39m\\]"
 
   PS1="
-${cyan_bold}$(date +'%H:%M:%S') ${purple}\h ${reset_color}in ${green}\w
+${cyan_bold}$(date +'%H:%M:%S') ${purple}\\h ${reset_color}in ${green}\\w
 ${cyan_bold}$(git_prompt)${green}→${reset_color} "
 
   export PS1
