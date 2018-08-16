@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 macos_setup() {
+  # inspired by https://mths.be/macos
   defaults write com.apple.dock persistent-apps -array
   defaults write com.apple.dock autohide -boolean true
   defaults write com.apple.dock orientation -string left
