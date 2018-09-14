@@ -35,5 +35,5 @@ RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
 ### Install the specified formulae and casks
 
 ```
-cd "${HOME}/workspace/dotfiles" && brew bundle
+brew bundle --global
 ```

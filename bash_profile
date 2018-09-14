@@ -18,21 +18,13 @@ export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
 export HOMEBREW_CASK_OPTS='--require-sha'
 
-b_up() {
-  brew upgrade && \
-  brew cleanup && \
-  brew doctor
-}
-
-bc_up() {
-  brew cask upgrade && \
-  brew cask cleanup && \
-  brew cask doctor
-}
-
 bup() {
-  b_up
-  bc_up
+  brew update && \
+    brew bundle cleanup --global --force && \
+    brew bundle --global && \
+    brew upgrade && brew cask upgrade && \
+    brew cleanup && \
+    brew doctor ; brew cask doctor
 }
 
 source "${HOME}/.bashrc"
