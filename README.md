@@ -37,3 +37,10 @@ RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
 ```
 brew bundle --global
 ```
+
+#### Install [luan/nvim](https://github.com/luan/nvim), and python bindings
+
+```
+git clone https://github.com/luan/nvim ~/.config/nvim && \
+  pip3 install neovim
+```
