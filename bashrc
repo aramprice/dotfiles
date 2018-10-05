@@ -125,5 +125,11 @@ export TERM="xterm-256color"
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin
 
+# Ruby
+if command -v ruby > /dev/null && command -v gem > /dev/null; then
+  GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+  export GEM_HOME
+  export PATH=${PATH}:"${GEM_HOME}/bin"
+fi
 ## Direnv
 eval "$(direnv hook bash)"
