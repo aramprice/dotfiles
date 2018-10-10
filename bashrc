@@ -131,5 +131,6 @@ if command -v ruby > /dev/null && command -v gem > /dev/null; then
   export GEM_HOME
   export PATH=${PATH}:"${GEM_HOME}/bin"
 fi
+
 ## Direnv
 eval "$(direnv hook bash)"
