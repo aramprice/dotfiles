@@ -6,41 +6,55 @@
 
 ## Installation
 
-### Install [homebrew](https://brew.sh)
+### Clone this repo
+
+```
+mkdir -p "${HOME}/workspace" && \
+  cd "${HOME}/workspace" && \
+  git clone git@github.com/aramprice/dotfiles
+```
+
+#### Install `brew`
 
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-### Clone this repo
+via: https://brew.sh/
+
+#### Converge the [Brewfile](https://github.com/Homebrew/homebrew-bundle)
 
 ```
-git clone https://github.com/aramprice/dotfiles.git "${HOME}/workspace/dotfiles"
+cd "${HOME}/workspace/aramprice/dotfiles/" &&
+  brew bundle
 ```
 
-### Install [rcm](https://github.com/thoughtbot/rcm)
+#### Link dotfiles
 
 ```
-brew install thoughtbot/formulae/rcm
+RCRC="${HOME}/workspace/aramprice/dotfiles/rcrc" rcup -v
 ```
 
-### Install the dotfiles
+The `rcup` command should have been installed by `brew bundle` above.
+
+#### Install Luan's [nvim](https://github.com/luan/nvim) config
 
 ```
-RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
+mkdir -p ~/.config && \
+  git clone https://github.com/luan/nvim ~/.config/nvim
 ```
 
-## Optional
-
-### Install the specified formulae and casks
+##### Install neovim pything bindings
 
 ```
-brew bundle --global
+pip3 install neovim
 ```
 
-#### Install [luan/nvim](https://github.com/luan/nvim), and python bindings
+Both `nvim`, and `python` should have been install by `brew bundle` above.
+
+#### Configure macOS Settings
 
 ```
-git clone https://github.com/luan/nvim ~/.config/nvim && \
-  pip3 install neovim
+source "${HOME}/.bash_profile" &&
+  macos_setup
 ```
