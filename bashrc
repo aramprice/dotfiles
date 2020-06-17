@@ -1,34 +1,27 @@
 #!/usr/bin/env bash
 
-## Aliases
-if ls --color > /dev/null 2>&1; then # GNU `ls`
-  alias ls="ls -F --color=always"
-else # bsd `ls`
-  alias ls="ls -F -G"
-fi
-alias ll="ls -l"
-alias la="ls -a"
-alias sbp='source ~/.bashrc'
-alias vi='vim'
-alias vim='nvim'
+# shellcheck source=profile
+test -f "${HOME}/.profile" && source "${HOME}/.profile"
 
-## Functions
-pullify() {
-  git config --add remote.origin.fetch '+refs/pull/*/head:refs/remotes/origin/pr/*'
-  git fetch origin
-}
+test -f /usr/local/etc/bash_completion && source /usr/local/etc/bash_completion
+
+## HISTORY
+HISTCONTROL="ignorespace:ignoredups"
+HISTSIZE=1000000
+HISTFILESIZE=1000000
+HISTIGNORE="ls:bg:fg:history"
+shopt -s histappend # append history file instead of overwriting
+shopt -s cmdhist
 
 git_branch() {
-  local original_dir
   original_dir="$(pwd)"
-  local git_dir
-  git_dir=$(git rev-parse --show-toplevel 2>/dev/null)
+  git_dir="$(git rev-parse --show-toplevel 2>/dev/null)"
 
-  if [[ $? -eq 0 ]]; then
+  if test $? -eq 0; then
     cd "${git_dir}" || exit
-      branch=$(git branch --points-at=HEAD 2>/dev/null | grep -E '^\*' | tr -d '\n' | sed 's/^* //')
-      if [[ "$branch" == 'no branch' ]]; then
-        branch=$(git rev-list --abbrev-commit --max-count=1 HEAD)
+      branch="$(git branch --points-at=HEAD 2>/dev/null | grep -E '^\*' | tr -d '\n' | sed 's/^* //')"
+      if test "${branch}" = 'no branch'; then
+        branch="$(git rev-list --abbrev-commit --max-count=1 HEAD)"
       fi
     cd "${original_dir}" || exit
 
@@ -36,84 +29,36 @@ git_branch() {
   fi
 }
 
-git_prompt() {
-  local red="\\[\\e[0;31m\\]"
-  local green="\\[\\e[0;32m\\]"
-  local reset_color="\\[\\e[39m\\]"
+prompt_command() {
+  history -a; history -c; history -r; # append, clear, reload
 
-  branch=$(git_branch)
-  if [[ -z "${branch}" ]]; then
-    return
+  red='\[\e[0;31m\]'
+  green='\[\e[0;32m\]'
+  magenta='\[\e[0;35m\]'
+  cyan='\[\e[0;36m\]'
+  reset_color='\[\e[39m\]'
+  time="${cyan}\t${reset_color}"
+  host="${magenta}\\h${reset_color}"
+  directory="${green}\\w${reset_color}"
+  privilege_indicator="${green}\\$ ${reset_color}"
+  git_info=""
+
+  branch="$(git_branch)"
+  if test -n "${branch}"; then
+    case "$(git status --porcelain 2> /dev/null | wc -l | tr -d ' ')" in
+      "0")
+        state_indicator="${green}✓${reset_color}"
+      ;;
+      *)
+        state_indicator="${red}✗${reset_color}"
+      ;;
+    esac
+
+    git_info="${state_indicator} ${green}${branch}${reset_color}"
   fi
 
-  if [[ "$(git status --porcelain | wc -l)" -gt 0 ]]; then
-    status="${red}✗${reset_color}"
-  else
-    status="${green}✓${reset_color}"
-  fi
-
-  echo "${reset_color}${status}${green} ${branch}${reset_color} ${reset_color}"
+  PS1="${time} ${host}:${directory}
+${git_info} ${privilege_indicator}"
 }
 
-set_ps1() {
-  local green="\\[\\e[0;32m\\]"
-  local purple="\\[\\e[0;35m\\]"
-  local cyan_bold="\\[\\e[36;1m\\]"
-  local reset_color="\\[\\e[39m\\]"
-
-  PS1="
-${cyan_bold}$(date +'%H:%M:%S') ${purple}\\h ${reset_color}in ${green}\\w
-${cyan_bold}$(git_prompt)${green}→${reset_color} "
-
-  export PS1
-}
-
-## Golang: This has to happen after GVM otherwise GOPATH will get unset
-export GOPATH="${HOME}/go"
-export PATH=${PATH}:"${GOPATH}/bin":/usr/local/go/bin
-
-## Chruby + Ruby
-chruby_script="/usr/local/share/chruby/chruby.sh"
-if [[ -f "${chruby_script}" ]]; then
-  source "${chruby_script}"
-  chruby ruby
-fi
-
-if command -v ruby > /dev/null && command -v gem > /dev/null; then
-  GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
-  export GEM_HOME
-  export PATH=${PATH}:"${GEM_HOME}/bin"
-fi
-
-## Git Duet
-export GIT_DUET_ROTATE_AUTHOR=1
-export GIT_DUET_SET_GIT_USER_CONFIG=1
-export GIT_DUET_GLOBAL=true
-
-## Don't check mail when opening terminal.
-unset MAILCHECK
-
-## Default Editor
-export EDITOR="nvim"
-
-## Force xterm-256color
-export TERM="xterm-256color"
-
-## HISTORY
-export HISTCONTROL=ignoreboth
-HISTSIZE=64000 # set a large history size
-HISTFILESIZE=$HISTSIZE
-shopt -s histappend # append history file instead of overwriting
-
-## PATH
-export PATH=${HOME}/.local/bin:${HOME}/bin:${PATH} # Add  ~/.local/bin, ~/bin PATH
-
-## PS1 - after PATH
-PROMPT_COMMAND=set_ps1
-
-## Direnv
-eval "$(direnv hook bash)"
-
-[[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion
-
-[[ -f ~/.fzf.bash ]] && source "${HOME}/.fzf.bash"
+PROMPT_COMMAND=prompt_command

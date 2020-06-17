@@ -1,14 +1,34 @@
-#!/bin/bash
-set -euo pipefail
-IFS=$'\n\t'
+#!/usr/bin/env sh
+set -euo
 
-GITCONFIG="${HOME}/.gitconfig"
-INCLUDE_DIRECTIVE='path="~/workspace/dotfiles/git-include"'
+_setup_gitconfig() {
+  dotfiles_dir="$(cd "$(dirname "${0}")"; cd ..; pwd)"
+  include_path="path=\"${dotfiles_dir}/git-include\""
+  include_directive="[include]
+  ${include_path}"
 
-if ! grep --quiet "${INCLUDE_DIRECTIVE}" "${GITCONFIG}" 2> /dev/null; then
-  cat << EOF >> "${GITCONFIG}"
+  gitconfig_file="${HOME}/.gitconfig"
 
-[include]
-  ${INCLUDE_DIRECTIVE}
-EOF
-fi
+  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2> /dev/null; then
+    echo "Appending to '${gitconfig_file}':"
+    echo "${include_directive}"
+    echo ""
+
+    echo "" >> "${gitconfig_file}"
+    echo "${include_directive}" >> "${gitconfig_file}"
+  fi
+}
+
+_install_luan_nvim_config() {
+  nvim_config_dir="${HOME}/.config/nvim"
+  test -d "${nvim_config_dir}" || git clone https://github.com/luan/nvim "${nvim_config_dir}"
+  pip3 install neovim
+}
+
+main() {
+  _setup_gitconfig
+  _install_git_hooks_core
+  _install_luan_nvim_config
+}
+
+main

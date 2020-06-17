@@ -1,2 +1,2 @@
-EXCLUDES="README.md LICENSE"
+EXCLUDES="README.md LICENSE git-include Brewfile"
 DOTFILES_DIRS="${HOME}/workspace/dotfiles"

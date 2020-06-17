@@ -1,6 +1,7 @@
 [alias]
-  ci = duet-commit --verbose
-  co = checkout
+  ci = commit --verbose
+  sw = switch
+  re = restore
   di = diff
   lg = log --graph --decorate=short --pretty=\"format:[%Cred%h%Creset]%d %ar by %Cblue%an%Creset. %Cgreen%s%Creset\" --find-renames=50%
   lw = log --decorate=short --graph --color-words -w --find-renames=50%
@@ -15,6 +16,9 @@
 
 [grep]
   lineNumber = true
+
+[pull]
+  rebase = true
 
 [push]
   recurseSubmodules=check

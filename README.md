@@ -2,16 +2,14 @@
 
 ## Assumptions
 
-- You are using bash
+- You are using `zsh`
 
 ## Installation
 
 ### Clone this repo
 
 ```
-mkdir -p "${HOME}/workspace" && \
-  cd "${HOME}/workspace" && \
-  git clone git@github.com/aramprice/dotfiles
+git clone git@github.com/aramprice/dotfiles "${HOME}/workspace/dotfiles"
 ```
 
 #### Install `brew`
@@ -25,36 +23,26 @@ via: https://brew.sh/
 #### Converge the [Brewfile](https://github.com/Homebrew/homebrew-bundle)
 
 ```
-cd "${HOME}/workspace/aramprice/dotfiles/" &&
-  brew bundle
+HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile" brew bundle
 ```
 
-#### Link dotfiles
+#### Install dotfiles and neovim
 
 ```
-RCRC="${HOME}/workspace/aramprice/dotfiles/rcrc" rcup -v
+RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
 ```
 
-The `rcup` command should have been installed by `brew bundle` above.
+via: https://github.com/thoughtbot/rcm
 
-#### Install Luan's [nvim](https://github.com/luan/nvim) config
+This command will invoke the [`pre-up`](dotfiles/hooks/pre-up) hook which does the following:
 
-```
-mkdir -p ~/.config && \
-  git clone https://github.com/luan/nvim ~/.config/nvim
-```
-
-##### Install neovim pything bindings
-
-```
-pip3 install neovim
-```
-
-Both `nvim`, and `python` should have been install by `brew bundle` above.
+- Clone Luan's [nvim](https://github.com/luan/nvim) config into `~/.config/nvim`
+  - Install neovim python bindings (`pip3 install neovim`)
 
 #### Configure macOS Settings
 
+Optional. Set some macOS, and App settings, see [`macos_setup`](dotfiles/profile#L15-L66) for details.
+
 ```
-source "${HOME}/.bash_profile" &&
-  macos_setup
+source "${HOME}/.profile" && macos_setup
 ```
