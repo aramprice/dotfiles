@@ -67,6 +67,7 @@ macos_setup() {
 
 # Homebrew
 export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
+export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
 export HOMEBREW_CASK_OPTS='--require-sha'
 export HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile"
