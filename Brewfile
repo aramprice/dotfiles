@@ -10,7 +10,7 @@ brew "direnv"
 brew "fd"
 brew "neovim"
 brew "node"
-brew "python"
+brew "python@3.8", link: false
 brew "ripgrep"
 brew "shellcheck"
 brew "thoughtbot/formulae/rcm"
