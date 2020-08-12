@@ -36,6 +36,8 @@ via: https://github.com/thoughtbot/rcm
 
 This command will invoke the [`pre-up`](dotfiles/hooks/pre-up) hook which does the following:
 
+- Create a `${HOME}/.gitconfig` which correctly sources `${HOME}/workspace/dotfiles/git-include`
+  - This is done, instead of symlinking, because some `git` commands modify `${HOME}/.gitconfig` resulting in dirty repo state
 - Clone Luan's [nvim](https://github.com/luan/nvim) config into `~/.config/nvim`
   - Install neovim python bindings (`pip3 install neovim`)
 
