@@ -25,9 +25,13 @@ _install_luan_nvim_config() {
   pip3 install neovim
 }
 
+_fix_permissions_on_usr_local_share() {
+  chmod 755 /usr/local/share
+}
+
 main() {
   _setup_gitconfig
-  _install_git_hooks_core
+  _fix_permissions_on_usr_local_share
   _install_luan_nvim_config
 }
 

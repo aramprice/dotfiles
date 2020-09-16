@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+function main() {
+  echo "Installing Homebrew"
+  if ! [ -x "$(command -v brew)" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  fi
+
+  echo "Running 'brew bundle'"
+  HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile" brew bundle
+
+  echo "Running 'rcup'"
+  RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
+}
+
+main

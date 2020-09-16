@@ -76,12 +76,12 @@ homebrew_git_api_token="${HOME}/.homebrew-git-api-token"
 test -f "${homebrew_git_api_token}" && . "${homebrew_git_api_token}"
 
 bup() {
-  brew update && \
-    brew bundle cleanup --force --verbose && \
-    brew bundle && \
-    brew upgrade && brew cask upgrade && \
-    brew cleanup && \
-    brew doctor ; brew cask doctor
+  brew update
+  brew bundle cleanup --force --verbose
+  brew bundle
+  brew upgrade --greedy
+  brew cleanup
+  brew doctor --verbose
 }
 
 ## Golang: This has to happen after GVM otherwise GOPATH will get unset

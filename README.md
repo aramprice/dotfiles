@@ -12,36 +12,24 @@
 git clone git@github.com/aramprice/dotfiles "${HOME}/workspace/dotfiles"
 ```
 
-#### Install `brew`
+### Run Setup script
 
 ```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+cd ~/workspace/dotfiles && ./setup
 ```
 
-via: https://brew.sh/
+This will:
+1. Install Homebrew (see: https://brew.sh/)
+2. Converge the `Brewfile` (see: https://github.com/Homebrew/homebrew-bundle)
+3. Symlink the content of `dotfiles/` to `${HOME}` (see: https://github.com/thoughtbot/rcm)
 
-#### Converge the [Brewfile](https://github.com/Homebrew/homebrew-bundle)
-
-```
-HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile" brew bundle
-```
-
-#### Install dotfiles and neovim
-
-```
-RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
-```
-
-via: https://github.com/thoughtbot/rcm
-
-This command will invoke the [`pre-up`](dotfiles/hooks/pre-up) hook which does the following:
-
-- Create a `${HOME}/.gitconfig` which correctly sources `${HOME}/workspace/dotfiles/git-include`
-  - This is done, instead of symlinking, because some `git` commands modify `${HOME}/.gitconfig` resulting in dirty repo state
+Before creating symlinks `rcup` will do the following:
+- Create a `${HOME}/.gitconfig` which sources `${HOME}/workspace/dotfiles/git-include`
 - Clone Luan's [nvim](https://github.com/luan/nvim) config into `~/.config/nvim`
   - Install neovim python bindings (`pip3 install neovim`)
+- Make permissions on `/usr/local/share` amenable to `zsh compinit`
 
-#### Configure macOS Settings
+### Configure macOS Settings
 
 Optional. Set some macOS, and App settings, see [`macos_setup`](dotfiles/profile#L15-L66) for details.
 
