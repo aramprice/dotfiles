@@ -82,7 +82,7 @@ bup() {
   brew upgrade --greedy
   brew cleanup
   brew doctor --verbose
-  date '+%t%Y-%m-%d %H:%M:%S'
+  date '+==> %Y-%m-%d %H:%M:%S'
 }
 
 ## Golang: This has to happen after GVM otherwise GOPATH will get unset
