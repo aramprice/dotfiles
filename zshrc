@@ -29,6 +29,8 @@ zstyle ":vcs_info:*" formats "%m %b"
 zstyle ":vcs_info:*" actionformats "%m %b|%{$fg[red]%}%a%{$reset_color%}"
 zstyle ':vcs_info:git*+set-message:*' hooks git-st
 
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 function +vi-git-st() {
   case "$(git status --porcelain 2> /dev/null | wc -l | tr -d ' ')" in
     "0")
