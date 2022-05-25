@@ -1,14 +1,13 @@
 #!/usr/bin/env sh
 
-## Aliases
-alias ag="echo \"====> Use 'rg' instead of 'ag'!\";echo; rg"
-if ls --color > /dev/null 2>&1; then # GNU `ls`
-  alias ls="ls -F --color=always"
-else # bsd `ls`
-  alias ls="ls -F -G"
+if command -v exa > /dev/null; then
+  alias ls="exa -F --color=auto"
+else
+  alias ls="ls -F --color=auto"
 fi
 alias ll="ls -l"
 alias la="ls -a"
+
 alias vi='vim'
 alias vim='nvim'
 
