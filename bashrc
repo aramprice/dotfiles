@@ -3,7 +3,7 @@
 # shellcheck source=profile
 test -f "${HOME}/.profile" && source "${HOME}/.profile"
 
-test -f /usr/local/etc/bash_completion && source /usr/local/etc/bash_completion
+test -f "${BREW_PREFIX}/etc/bash_completion" && source "${BREW_PREFIX}/etc/bash_completion"
 
 ## HISTORY
 HISTCONTROL="ignorespace:ignoredups"

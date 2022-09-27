@@ -65,6 +65,7 @@ macos_setup() {
 }
 
 # Homebrew
+export BREW_PREFIX="$(brew --prefix)"
 export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
 export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
@@ -86,10 +87,10 @@ bup() {
 
 ## Golang: This has to happen after GVM otherwise GOPATH will get unset
 export GOPATH="${HOME}/go"
-export PATH=${PATH}:"${GOPATH}/bin":/usr/local/go/bin
+export PATH=${PATH}:"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
 
 ## Chruby
-chruby_script="/usr/local/share/chruby/chruby.sh"
+chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
 # shellcheck source=/dev/null
 test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
 
@@ -115,8 +116,8 @@ export EDITOR="nvim"
 export TERM="xterm-256color"
 
 ## PATH
-export PATH=/usr/local/bin:/usr/local/sbin:${PATH} # Add /usr/local/{bin,sbin} to PATH
-export PATH=${HOME}/.local/bin:${HOME}/bin:${PATH} # Add ~/.local/bin, ~/bin to PATH
+export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":${PATH}
+export PATH="${HOME}/.local/bin":"${HOME}/bin":${PATH} # Add ~/.local/bin, ~/bin to PATH
 
 ## Direnv
 test -e "$(which direnv)" && eval "$(direnv hook "$(ps -ocomm= $$| cut -d"-" -f2)")"
