@@ -65,7 +65,7 @@ macos_setup() {
 }
 
 # Homebrew
-export BREW_PREFIX="$(brew --prefix)"
+export BREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
 export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
 export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects

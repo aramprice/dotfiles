@@ -1,16 +1,24 @@
 #!/usr/bin/env zsh
 
 function main() {
+  if [ "$(uname -p)" = 'arm' ]; then
+    local brew_prefix='/opt/homebrew'
+  else
+    local brew_prefix='/usr/local'
+  fi
+
   echo "Installing Homebrew"
-  if ! [ -x "$(command -v brew)" ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  if ! [ -x "$(command -v "${brew_prefix}/bin/brew")" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
   echo "Running 'brew bundle'"
-  HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile" brew bundle
+  HOMEBREW_BUNDLE_FILE="${HOME}/workspace/dotfiles/Brewfile" "${brew_prefix}/bin/brew" bundle
 
   echo "Running 'rcup'"
-  RCRC="${HOME}/workspace/dotfiles/rcrc" rcup -v
+
+  RCRC="${HOME}/workspace/dotfiles/rcrc" \
+    "${brew_prefix}/bin/rcup" -v
 }
 
 main
