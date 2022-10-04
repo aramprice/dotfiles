@@ -25,8 +25,19 @@ _install_luan_nvim_config() {
   pip3 install neovim
 }
 
+_fix_permissions_on_usr_local_share() {
+  if [ "$(uname -p)" = 'arm' ]; then
+    local brew_prefix='/opt/homebrew'
+  else
+    local brew_prefix='/usr/local'
+  fi
+
+  chmod 755 "${brew_prefix}/share"
+}
+
 main() {
   _setup_gitconfig
+  _fix_permissions_on_usr_local_share
   _install_luan_nvim_config
 }
 
