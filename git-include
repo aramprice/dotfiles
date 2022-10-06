@@ -23,5 +23,11 @@
 [push]
   recurseSubmodules=check
 
+[rebase]
+  autoStash = true
+
+[rerere]
+  enabled = true
+
 [url "git@github.com:"]
   pushInsteadOf = https://github.com/
