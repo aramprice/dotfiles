@@ -1,5 +1,6 @@
 [alias]
   ci = commit --verbose
+  dci = duet-commit --verbose
   sw = switch
   re = restore
   di = diff
