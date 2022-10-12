@@ -94,12 +94,11 @@ chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
 # shellcheck source=/dev/null
 test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
 
-## Ruby Setup
-if command -v ruby > /dev/null && command -v gem > /dev/null; then
-  GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
-  export GEM_HOME
-  export PATH=${PATH}:"${GEM_HOME}/bin"
-fi
+# ruby-install
+rb-inst() {
+  # TODO: remove `enable-shared` after ruby v3.1.3 is released
+  ruby-install $@ -- --enable-shared --disable-install-doc
+}
 
 ## Git Duet
 export GIT_DUET_ROTATE_AUTHOR=1
