@@ -25,8 +25,6 @@ This will:
 
 Before creating symlinks `rcup` will do the following:
 - Create a `${HOME}/.gitconfig` which sources `${HOME}/workspace/dotfiles/git-include`
-- Clone Luan's [nvim](https://github.com/luan/nvim) config into `~/.config/nvim`
-  - Install neovim python bindings (`pip3 install neovim`)
 - Make permissions on `/usr/local/share` amenable to `zsh compinit`
 
 ### Configure macOS Settings

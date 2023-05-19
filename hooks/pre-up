@@ -19,12 +19,6 @@ _setup_gitconfig() {
   fi
 }
 
-_install_luan_nvim_config() {
-  nvim_config_dir="${HOME}/.config/nvim"
-  test -d "${nvim_config_dir}" || git clone https://github.com/luan/nvim "${nvim_config_dir}"
-  pip3 install neovim
-}
-
 _fix_permissions_on_usr_local_share() {
   if [ "$(uname -p)" = 'arm' ]; then
     local brew_prefix='/opt/homebrew'
@@ -38,7 +32,6 @@ _fix_permissions_on_usr_local_share() {
 main() {
   _setup_gitconfig
   _fix_permissions_on_usr_local_share
-  _install_luan_nvim_config
 }
 
 main
