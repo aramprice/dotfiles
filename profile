@@ -65,7 +65,8 @@ macos_setup() {
 }
 
 # Homebrew
-export BREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
+BREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
+export BREW_PREFIX
 export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
 export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
@@ -95,7 +96,7 @@ chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
 test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
 
 # ruby-install
-rb-inst() {
+rb_inst() {
   # TODO: remove `enable-shared` after ruby v3.1.3 is released
   ruby-install $@ -- --enable-shared --disable-install-doc
 }
