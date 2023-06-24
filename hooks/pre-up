@@ -3,7 +3,7 @@ set -euo
 
 _setup_gitconfig() {
   dotfiles_dir="$(cd "$(dirname "${0}")"; cd ..; pwd)"
-  include_path="path=\"${dotfiles_dir}/git-include\""
+  include_path="path=\"${HOME}/.config/git/config-include\""
   include_directive="[include]
   ${include_path}"
 
