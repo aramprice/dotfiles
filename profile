@@ -88,7 +88,7 @@ bup() {
 
 ## Golang: This has to happen after GVM otherwise GOPATH will get unset
 export GOPATH="${HOME}/go"
-export PATH=${PATH}:"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
+export PATH="${PATH}":"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
 
 ## Chruby
 chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
@@ -97,7 +97,7 @@ test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
 
 # ruby-install
 rb_inst() {
-  ruby-install $@ -- --disable-install-doc
+  ruby-install "${@}" -- --disable-install-doc
 }
 
 ## Git Duet
@@ -115,8 +115,8 @@ export EDITOR="nvim"
 export TERM="xterm-256color"
 
 ## PATH
-export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":${PATH}
-export PATH="${HOME}/.local/bin":"${HOME}/bin":${PATH} # Add ~/.local/bin, ~/bin to PATH
+export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":"${PATH}"
+export PATH="${HOME}/.local/bin":"${HOME}/bin":"${PATH}" # Add ~/.local/bin, ~/bin to PATH
 
 ## Direnv
 if command -v direnv > /dev/null; then
