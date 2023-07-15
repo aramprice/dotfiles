@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+set -eux
+
+# Creates a `~/.gitconfig` which `[include]`'s the git configuration in this repo.
+# The reason for this is that with tools which rotate authorship (ex. `git-duet`) the
+# user's `.gitconfig` is regularly modified causing the dotfiles repo to be changed.
+#`By using Git's `[include]` directive the configuration in this repo remains unmodified.
+_add_include_to_gitconfig() {
+  dotfiles_dir="$(cd "$(dirname "${0}")"; cd ..; pwd)"
+  include_path="path=\"${dotfiles_dir}/git-include\""
+  include_directive="[include]
+  ${include_path}"
+
+  gitconfig_file="${HOME}/.gitconfig"
+
+  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2> /dev/null; then
+    echo "Appending to '${gitconfig_file}':"
+    echo "${include_directive}"
+    echo ""
+
+    echo "" >> "${gitconfig_file}"
+    echo "${include_directive}" >> "${gitconfig_file}"
+  fi
+}
+_add_include_to_gitconfig
+unset _add_include_to_gitconfig
+
+# Open permissions on this directory will cause security warnings from ZSH.
+_fix_permissions_on_usr_local_share() {
+  chmod 755 "${BREW_PREFIX}/share"
+}
+_fix_permissions_on_usr_local_share
+unset _fix_permissions_on_usr_local_share
+
