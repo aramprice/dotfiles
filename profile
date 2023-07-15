@@ -97,8 +97,7 @@ test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
 
 # ruby-install
 rb_inst() {
-  # TODO: remove `enable-shared` after ruby v3.1.3 is released
-  ruby-install $@ -- --enable-shared --disable-install-doc
+  ruby-install $@ -- --disable-install-doc
 }
 
 ## Git Duet
