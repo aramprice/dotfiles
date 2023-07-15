@@ -1,5 +1,16 @@
 #!/usr/bin/env sh
 
+if [ -x "$(command -v brew)" ]; then
+  BREW_PREFIX="$(brew --prefix)"
+else
+  if [ "$(uname -p)" = 'arm' ]; then
+    BREW_PREFIX='/opt/homebrew'
+  else
+    BREW_PREFIX='/usr/local'
+  fi
+fi
+export BREW_PREFIX
+
 if command -v exa > /dev/null; then
   alias ls="exa -F --color=auto"
 else
@@ -65,8 +76,6 @@ macos_setup() {
 }
 
 # Homebrew
-BREW_PREFIX="$(/opt/homebrew/bin/brew --prefix)"
-export BREW_PREFIX
 export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
 export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
