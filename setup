@@ -3,8 +3,6 @@
 _setup() {
   dotfiles_dir="$(cd "$(dirname "${0}")" && pwd)"
 
-  . "${dotfiles_dir}/profile"
-
   if ! [ -x "$(command -v brew)" ]; then
     echo "Installing Homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -18,9 +16,7 @@ _setup() {
   echo "Running 'rcup'"
   RCRC="${dotfiles_dir}/rcrc" rcup -v
 }
-
 _setup
-
 unset _setup
 
 exec zsh -l
