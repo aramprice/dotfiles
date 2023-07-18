@@ -6,8 +6,7 @@ set -eux
 # user's `.gitconfig` is regularly modified causing the dotfiles repo to be changed.
 #`By using Git's `[include]` directive the configuration in this repo remains unmodified.
 _add_include_to_gitconfig() {
-  dotfiles_dir="$(cd "$(dirname "${0}")"; cd ..; pwd)"
-  include_path="path=\"${dotfiles_dir}/git-include\""
+  include_path="path=\"${HOME}/.config/git/config-include\""
   include_directive="[include]
   ${include_path}"
 
