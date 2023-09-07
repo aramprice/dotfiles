@@ -11,8 +11,8 @@ else
 fi
 export BREW_PREFIX
 
-if command -v exa > /dev/null; then
-  alias ls="exa -F --color=auto"
+if command -v eza > /dev/null; then
+  alias ls="eza -F --color=auto"
 else
   alias ls="ls -F --color=auto"
 fi
