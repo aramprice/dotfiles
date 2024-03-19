@@ -127,9 +127,3 @@ export TERM="xterm-256color"
 export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":"${PATH}"
 export PATH="${HOME}/.local/bin":"${HOME}/bin":"${PATH}" # Add ~/.local/bin, ~/bin to PATH
 
-## Direnv
-if command -v direnv > /dev/null; then
-  shell_name="$(ps -ocomm= $$| cut -d"-" -f2)"
-  test "${shell_name}" != 'sh' && eval "$(direnv hook "${shell_name}")"
-fi
-

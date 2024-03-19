@@ -2,6 +2,11 @@
 
 test -f "${HOME}/.profile" && emulate sh -c '. "${HOME}/.profile"'
 
+## Direnv
+if command -v direnv > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
+
 # Homebrew zsh completions
 fpath=("${BREW_PREFIX}/share/zsh-completions" $fpath)
 

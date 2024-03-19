@@ -5,6 +5,11 @@ test -f "${HOME}/.profile" && source "${HOME}/.profile"
 
 test -f "${BREW_PREFIX}/etc/bash_completion" && source "${BREW_PREFIX}/etc/bash_completion"
 
+## Direnv
+if command -v direnv > /dev/null; then
+  eval "$(direnv hook bash)"
+fi
+
 ## HISTORY
 HISTCONTROL="ignorespace:ignoredups"
 HISTSIZE=1000000
