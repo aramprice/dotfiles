@@ -91,7 +91,7 @@ bup() {
   brew bundle
   brew upgrade --greedy
   brew cleanup
-  brew doctor --verbose
+  brew doctor
   date '+==> %Y-%m-%d %H:%M:%S'
 }
 
