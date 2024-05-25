@@ -1,7 +1,6 @@
 tap "apparition47/tap"
 tap "git-duet/tap"
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "thoughtbot/formulae"
 brew "curl"
 brew "direnv"
