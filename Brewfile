@@ -1,4 +1,3 @@
-tap "apparition47/tap"
 tap "git-duet/tap"
 tap "homebrew/bundle"
 tap "thoughtbot/formulae"
