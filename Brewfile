@@ -1,5 +1,4 @@
 tap "git-duet/tap"
-tap "homebrew/bundle"
 brew "curl"
 brew "direnv"
 brew "libgit2"
