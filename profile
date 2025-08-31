@@ -35,10 +35,6 @@ macos_setup() {
   defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 # enable full keyboard access
   defaults write NSGlobalDomain com.apple.keyboard.fnState -boolean true  # enable function keys
 
-  # SecureKeyboardEntry for Terminal & iTerm https://security.stackexchange.com/a/47786/8918
-  defaults write com.apple.terminal SecureKeyboardEntry -bool true
-  defaults write com.googlecode.iterm2 SecureKeyboardEntry -bool true
-
   # Enable snap-to-grid for icons on the desktop and in other icon views
   /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" \
     "${HOME}/Library/Preferences/com.apple.finder.plist"
@@ -64,15 +60,8 @@ macos_setup() {
     OpenWith -bool true \
     Privileges -bool true
 
-  # Privacy: don’t send search queries to Apple
-  defaults write com.apple.Safari UniversalSearchEnabled -bool false
-  defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-
   # Enable Safari’s debug menu
   defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-  # Bypass the annoyingly slow t.co URL shortener
-  defaults write com.tapbots.TweetbotMac OpenURLsDirectly -bool true
 }
 
 # Homebrew
