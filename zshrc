@@ -39,10 +39,10 @@ source "${BREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 function +vi-git-st() {
   case "$(git status --porcelain 2> /dev/null | wc -l | tr -d ' ')" in
     "0")
-      hook_com[branch]="%{$fg[green]%}✓%{$reset_color%} %{$fg[green]%}${hook_com[branch]}%{$reset_color%}"
+	    hook_com[branch]="%{$fg[green]%}✓%{$reset_color%} ${hook_com[branch]}"
     ;;
     *)
-      hook_com[branch]="%{$fg[red]%}✗%{$reset_color%} %{$fg[green]%}${hook_com[branch]}%{$reset_color%}"
+	    hook_com[branch]="%{$fg[red]%}✗%{$reset_color%} ${hook_com[branch]}"
     ;;
   esac
 }
@@ -51,5 +51,4 @@ precmd() {
   vcs_info
 }
 
-PROMPT='%{$fg[cyan]%}%*%{$reset_color%} %{$fg[magenta]%}%m%{$reset_color%}:%{$fg[green]%}%~%{$reset_color%}
-${vcs_info_msg_0_} %{$fg[green]%}%# %{$reset_color%}'
+PROMPT='%{$fg[cyan]%}%*%{$reset_color%} %{$fg[green]%}%~%{$reset_color%}${vcs_info_msg_0_} %{$fg[green]%}%#%{$reset_color%} '
