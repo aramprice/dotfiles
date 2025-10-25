@@ -84,10 +84,6 @@ bup() {
   date '+==> %Y-%m-%d %H:%M:%S'
 }
 
-## Golang: This has to happen after GVM otherwise GOPATH will get unset
-export GOPATH="${HOME}/go"
-export PATH="${PATH}":"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
-
 ## Chruby
 chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
 # shellcheck source=/dev/null
@@ -103,9 +99,6 @@ export GIT_DUET_ROTATE_AUTHOR=1
 export GIT_DUET_SET_GIT_USER_CONFIG=1
 export GIT_DUET_GLOBAL=true
 
-## Don't check mail when opening terminal.
-unset MAILCHECK
-
 ## Default Editor
 export EDITOR="nvim"
 
@@ -114,5 +107,6 @@ export TERM="xterm-256color"
 
 ## PATH
 export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":"${PATH}"
-export PATH="${HOME}/.local/bin":"${HOME}/bin":"${PATH}" # Add ~/.local/bin, ~/bin to PATH
+export PATH="${PATH}":"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
+export PATH="${HOME}/.local/bin":"${HOME}/bin":"${PATH}"
 
