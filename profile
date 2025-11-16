@@ -11,11 +11,11 @@ else
 fi
 export BREW_PREFIX
 
-if command -v eza > /dev/null; then
-  alias ls="eza -F --color=auto"
-else
-  alias ls="ls -F --color=auto"
+if command -v eza >/dev/null; then
+  alias ls="eza"
+  alias tree="eza --tree"
 fi
+alias ls="ls -F --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 
@@ -23,36 +23,26 @@ alias vi='vim'
 alias vim='nvim'
 
 macos_setup() {
-  # based on https://mths.be/macos
+  defaults write NSGlobalDomain AppleICUDateFormatStrings -dict "1" "y-MM-dd" # sane date format
+  defaults write NSGlobalDomain AppleICUForce24HourTime -int 1
+  defaults write NSGlobalDomain AppleFirstWeekday -dict "gregorian" "2"  # first day of the week is monday
+  defaults write NSGlobalDomain com.apple.keyboard.fnState -boolean true # enable function keys
+  defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false     # Key repeats when you hold it
+
   defaults write com.apple.dock persistent-apps -array
   defaults write com.apple.dock autohide -boolean true
   defaults write com.apple.dock orientation -string left
+  defaults write com.apple.dock persistent-apps -array # <- clears apps "saved" to dock
+  defaults write com.apple.dock show-recents -bool false
 
-  defaults write -g ApplePressAndHoldEnabled -bool false  # Key repeats when you hold it
+  # Enable snap-to-grid for icons across Desktop, Standard View, and
+  for view_setting in "DesktopViewSettings" "FK_StandardViewSettings" "StandardViewSettings"; do
+    /usr/libexec/PlistBuddy -c "Set :${view_setting}:IconViewSettings:arrangeBy grid" \
+      "${HOME}/Library/Preferences/com.apple.finder.plist"
+  done
 
-  defaults write com.apple.menuextra.clock DateFormat -string 'EEE MMM d H:mm'
-
-  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3 # enable full keyboard access
-  defaults write NSGlobalDomain com.apple.keyboard.fnState -boolean true  # enable function keys
-
-  # Enable snap-to-grid for icons on the desktop and in other icon views
-  /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" \
-    "${HOME}/Library/Preferences/com.apple.finder.plist"
-  /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" \
-    "${HOME}/Library/Preferences/com.apple.finder.plist"
-  /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" \
-    "${HOME}/Library/Preferences/com.apple.finder.plist"
-
-  # Use list view in all Finder windows by default, other view mode codes: `icnv`, `clmv`, `glyv`
-  defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-
-  # Expand save panel by default
-  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-
-  # Expand print panel by default
-  defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-  defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+  defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # default to list view (others: `icnv`, `clmv`, `glyv`)
+  defaults write com.apple.finder NewWindowTarget -string "PfHm"      # Finder opens $HOME
 
   # Expand “General”, “Open with”, and “Sharing & Permissions” File Info panes:
   defaults write com.apple.finder FXInfoPanesExpanded -dict \
@@ -60,19 +50,24 @@ macos_setup() {
     OpenWith -bool true \
     Privileges -bool true
 
-  # Enable Safari’s debug menu
-  defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+  # Disable Click to Show Desktop
+  defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
+
+  for app in "Dock" "Finder"; do
+    echo "Restarting ${app}"
+    killall -HUP "${app}"
+  done
 }
 
 # Homebrew
-export HOMEBREW_NO_ANALYTICS=1 # Turn of homebrew data collection
-export HOMEBREW_BUNDLE_NO_LOCK=1 # No brew lockfile
+export HOMEBREW_NO_ANALYTICS=1         # Turn of homebrew data collection
+export HOMEBREW_BUNDLE_NO_LOCK=1       # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
 export HOMEBREW_CASK_OPTS='--require-sha'
 export HOMEBREW_BUNDLE_FILE="${HOME}/.Brewfile"
-homebrew_git_api_token="${HOME}/.homebrew-git-api-token"
 # shellcheck source=/dev/null
-test -f "${homebrew_git_api_token}" && . "${homebrew_git_api_token}"
+test -f "${HOME}/.homebrew-git-api-token" &&
+  . "${HOME}/.homebrew-git-api-token"
 
 bup() {
   brew update
@@ -84,15 +79,23 @@ bup() {
   date '+==> %Y-%m-%d %H:%M:%S'
 }
 
-## Chruby
-chruby_script="${BREW_PREFIX}/share/chruby/chruby.sh"
-# shellcheck source=/dev/null
-test -f "${chruby_script}" && . "${chruby_script}" && chruby ruby
-
-# ruby-install
+## Ruby
+test -f "${BREW_PREFIX}/share/chruby/chruby.sh" &&
+  . "${BREW_PREFIX}/share/chruby/chruby.sh" &&
+  chruby ruby
 rb_inst() {
-  ruby-install "${@}" -- --disable-install-doc
+  RUBY_CONFIGURE_OPTS="--disable-install-doc --without-tcl --without-tk"
+  export RUBY_CONFIGURE_OPTS
+  cpus_to_use="$(printf %.0f $(($(sysctl -n hw.ncpu) * .8)))" # use 80%
+
+  ruby-install --jobs "${cpus_to_use}" "${@}"
 }
+
+## direnv
+if command -v direnv >/dev/null; then
+  shell_name="$(ps -ocomm= $$ | cut -d"-" -f2)"
+  test "${shell_name}" != 'sh' && eval "$(direnv hook "${shell_name}")"
+fi
 
 ## Git Duet
 export GIT_DUET_ROTATE_AUTHOR=1
@@ -109,4 +112,3 @@ export TERM="xterm-256color"
 export PATH="${BREW_PREFIX}/bin":"${BREW_PREFIX}/sbin":"${PATH}"
 export PATH="${PATH}":"${GOPATH}/bin":"${BREW_PREFIX}/go/bin"
 export PATH="${HOME}/.local/bin":"${HOME}/bin":"${PATH}"
-
