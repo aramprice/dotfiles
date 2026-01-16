@@ -1,0 +1,12 @@
+# Default template location:
+#   ~/Library/Application\ Support/com.mitchellh.ghostty/config
+#
+# Show available config options and default values:
+#   `ghostty +show-config --default --docs`
+#
+# Online docs: https://ghostty.org/docs/config
+# =============================================
+
+#font-size = 15
+shell-integration-features = ssh-terminfo, sudo
+window-inherit-working-directory = false
