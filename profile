@@ -12,10 +12,11 @@ fi
 export BREW_PREFIX
 
 if command -v eza >/dev/null; then
-  alias ls="eza"
+  alias ls="eza -F"
   alias tree="eza --tree"
+else
+  alias ls="ls -F --color=auto"
 fi
-alias ls="ls -F --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 
