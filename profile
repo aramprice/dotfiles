@@ -2,8 +2,8 @@
 
 if [ -x "$(command -v brew)" ]; then
   BREW_PREFIX="$(brew --prefix)"
-elif [ "$(uname -p)" = 'arm' ]; then
-  BREW_PREFIX='/opt/homebrew'
+elif [ "$(uname -p)" = "arm" ]; then
+  BREW_PREFIX="/opt/homebrew"
 fi
 export BREW_PREFIX
 
@@ -16,8 +16,11 @@ fi
 alias ll="ls -l"
 alias la="ls -a"
 
-alias vi='vim'
-alias vim='nvim'
+if command -v nvim >/dev/null; then
+  export _editor="nvim"
+  alias vi="nvim"
+  alias vim="nvim"
+fi
 
 macos_setup() {
   defaults write NSGlobalDomain AppleICUDateFormatStrings -dict "1" "y-MM-dd" # sane date format
@@ -60,7 +63,7 @@ macos_setup() {
 export HOMEBREW_NO_ANALYTICS=1         # Turn of homebrew data collection
 export HOMEBREW_BUNDLE_NO_LOCK=1       # No brew lockfile
 export HOMEBREW_NO_INSECURE_REDIRECT=1 # Disallow `https` => `http` redirects
-export HOMEBREW_CASK_OPTS='--require-sha'
+export HOMEBREW_CASK_OPTS="--require-sha"
 export HOMEBREW_BUNDLE_FILE="${HOME}/.Brewfile"
 # shellcheck source=/dev/null
 test -f "${HOME}/.homebrew-git-api-token" &&
@@ -73,7 +76,7 @@ bup() {
   brew upgrade --greedy
   brew cleanup
   brew doctor
-  date '+==> %Y-%m-%d %H:%M:%S'
+  date "+==> %Y-%m-%d %H:%M:%S"
 }
 
 ## Ruby
@@ -101,7 +104,7 @@ export GIT_DUET_SET_GIT_USER_CONFIG=1
 export GIT_DUET_GLOBAL=true
 
 ## Default Editor
-export EDITOR="nvim"
+export EDITOR="${_editor:-vim}"
 
 ## Force xterm-256color
 export TERM="xterm-256color"
