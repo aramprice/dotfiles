@@ -1,0 +1,14 @@
+name: shellcheck
+on: push
+jobs:
+  verify: # <- name
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: |
+          brew update
+          brew install shellcheck
+      - name: Run shellcheck
+        run: |
+          shellcheck -x hooks/post-up profile bashrc bash_profile
