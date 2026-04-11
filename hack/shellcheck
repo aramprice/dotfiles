@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if ! command -v shellcheck >/dev/null; then
+  echo "shellcheck not found, installing vi brew"
+  brew update
+  brew install shellcheck
+fi
+
+(
+  cd "${REPO_ROOT}"
+  set -x
+  shellcheck --check-sourced \
+    hack/shellcheck \
+    hooks/post-up \
+    profile \
+    bashrc \
+    bash_profile
+)
