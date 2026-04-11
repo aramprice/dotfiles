@@ -20,4 +20,3 @@ _setup
 unset _setup
 
 exec zsh -l
-

@@ -2,12 +2,8 @@
 
 if [ -x "$(command -v brew)" ]; then
   BREW_PREFIX="$(brew --prefix)"
-else
-  if [ "$(uname -p)" = 'arm' ]; then
-    BREW_PREFIX='/opt/homebrew'
-  else
-    BREW_PREFIX='/usr/local'
-  fi
+elif [ "$(uname -p)" = 'arm' ]; then
+  BREW_PREFIX='/opt/homebrew'
 fi
 export BREW_PREFIX
 
@@ -81,6 +77,7 @@ bup() {
 }
 
 ## Ruby
+# shellcheck source=/dev/null
 test -f "${BREW_PREFIX}/share/chruby/chruby.sh" &&
   . "${BREW_PREFIX}/share/chruby/chruby.sh" &&
   chruby ruby

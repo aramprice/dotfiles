@@ -6,7 +6,7 @@ test -f "${HOME}/.profile" && source "${HOME}/.profile"
 test -f "${BREW_PREFIX}/etc/bash_completion" && source "${BREW_PREFIX}/etc/bash_completion"
 
 ## Direnv
-if command -v direnv > /dev/null; then
+if command -v direnv >/dev/null; then
   eval "$(direnv hook bash)"
 fi
 
@@ -24,10 +24,10 @@ git_branch() {
 
   if test $? -eq 0; then
     cd "${git_dir}" || exit
-      branch="$(git branch --points-at=HEAD 2>/dev/null | grep -E '^\*' | tr -d '\n' | sed 's/^* //')"
-      if test "${branch}" = 'no branch'; then
-        branch="$(git rev-list --abbrev-commit --max-count=1 HEAD)"
-      fi
+    branch="$(git branch --points-at=HEAD 2>/dev/null | grep -E '^\*' | tr -d '\n' | sed 's/^* //')"
+    if test "${branch}" = 'no branch'; then
+      branch="$(git rev-list --abbrev-commit --max-count=1 HEAD)"
+    fi
     cd "${original_dir}" || exit
 
     echo "${branch}"
@@ -35,7 +35,9 @@ git_branch() {
 }
 
 prompt_command() {
-  history -a; history -c; history -r; # append, clear, reload
+  history -a
+  history -c
+  history -r # append, clear, reload
 
   red='\[\e[0;31m\]'
   green='\[\e[0;32m\]'
@@ -50,12 +52,12 @@ prompt_command() {
 
   branch="$(git_branch)"
   if test -n "${branch}"; then
-    case "$(git status --porcelain 2> /dev/null | wc -l | tr -d ' ')" in
-      "0")
-        state_indicator="${green}✓${reset_color}"
+    case "$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')" in
+    "0")
+      state_indicator="${green}✓${reset_color}"
       ;;
-      *)
-        state_indicator="${red}✗${reset_color}"
+    *)
+      state_indicator="${red}✗${reset_color}"
       ;;
     esac
 
