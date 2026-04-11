@@ -12,22 +12,14 @@ _add_include_to_gitconfig() {
 
   gitconfig_file="${HOME}/.gitconfig"
 
-  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2> /dev/null; then
+  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2>/dev/null; then
     echo "Appending to '${gitconfig_file}':"
     echo "${include_directive}"
     echo ""
 
-    echo "" >> "${gitconfig_file}"
-    echo "${include_directive}" >> "${gitconfig_file}"
+    echo "" >>"${gitconfig_file}"
+    echo "${include_directive}" >>"${gitconfig_file}"
   fi
 }
 _add_include_to_gitconfig
 unset _add_include_to_gitconfig
-
-# Open permissions on this directory will cause security warnings from ZSH.
-_fix_permissions_on_usr_local_share() {
-  chmod 755 "${BREW_PREFIX}/share"
-}
-_fix_permissions_on_usr_local_share
-unset _fix_permissions_on_usr_local_share
-

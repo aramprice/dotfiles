@@ -25,7 +25,6 @@ This will:
 
 Before creating symlinks `rcup` will do the following:
 - Create a `${HOME}/.gitconfig` which sources `${HOME}/.config/git/config-include`
-- Make permissions on `/usr/local/share` amenable to `zsh compinit`
 
 ### Configure macOS Settings
 
