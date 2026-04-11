@@ -1,5 +1,5 @@
-#!/usr/bin/env sh
-set -eux
+#!/usr/bin/env bash
+set -eu -o pipefail
 
 # Creates a `~/.gitconfig` which `[include]`'s the git configuration in this repo.
 # The reason for this is that with tools which rotate authorship (ex. `git-duet`) the
@@ -12,13 +12,27 @@ _add_include_to_gitconfig() {
 
   gitconfig_file="${HOME}/.gitconfig"
 
-  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2>/dev/null; then
-    echo "Appending to '${gitconfig_file}':"
-    echo "${include_directive}"
-    echo ""
+  log_prefix="  $(basename "${BASH_SOURCE[0]}:")"
 
-    echo "" >>"${gitconfig_file}"
-    echo "${include_directive}" >>"${gitconfig_file}"
+  if ! grep --quiet "${include_path}" "${gitconfig_file}" 2>/dev/null; then
+    {
+      echo "${log_prefix} Appending to '${gitconfig_file}':"
+      echo "${include_directive}"
+      echo "${log_prefix} "
+      echo ""
+    } >&2
+
+    set -x
+    {
+      echo ""
+      echo "${include_directive}"
+    } >>"${gitconfig_file}"
+    set +x
+  else
+    {
+      echo "${log_prefix} Expected include found, not appending to '${gitconfig_file}'."
+      echo ""
+    } >&2
   fi
 }
 _add_include_to_gitconfig
