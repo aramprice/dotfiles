@@ -17,7 +17,7 @@ alias ll="ls -l"
 alias la="ls -a"
 
 if command -v nvim >/dev/null; then
-  export _editor="nvim"
+  EDITOR="nvim"
   alias vi="nvim"
   alias vim="nvim"
 fi
@@ -104,7 +104,7 @@ export GIT_DUET_SET_GIT_USER_CONFIG=1
 export GIT_DUET_GLOBAL=true
 
 ## Default Editor
-export EDITOR="${_editor:-vim}"
+export EDITOR="${EDITOR:-vim}"
 
 ## Force xterm-256color
 export TERM="xterm-256color"
