@@ -71,7 +71,7 @@ test -f "${HOME}/.homebrew-git-api-token" &&
 
 bup() {
   brew update
-  brew bundle cleanup --force --verbose
+  brew bundle cleanup --force
   brew bundle
   brew upgrade --greedy
   brew cleanup
