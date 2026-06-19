@@ -73,7 +73,7 @@ bup() {
   brew update
   brew bundle cleanup --force
   brew bundle
-  brew upgrade --greedy
+  brew upgrade --no-ask --greedy
   brew cleanup
   brew doctor
   date "+==> %Y-%m-%d %H:%M:%S"
