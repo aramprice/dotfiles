@@ -85,13 +85,6 @@ bup() {
 test -f "${BREW_PREFIX}/share/chruby/chruby.sh" &&
   . "${BREW_PREFIX}/share/chruby/chruby.sh" &&
   chruby ruby
-rb_inst() {
-  RUBY_CONFIGURE_OPTS="--disable-install-doc --without-tcl --without-tk"
-  export RUBY_CONFIGURE_OPTS
-  cpus_to_use="$(printf %.0f $(($(sysctl -n hw.ncpu) * .8)))" # use 80%
-
-  ruby-install --jobs "${cpus_to_use}" "${@}"
-}
 
 ## direnv
 if command -v direnv >/dev/null; then
