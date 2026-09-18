@@ -8,13 +8,15 @@ fi
 export BREW_PREFIX
 
 if command -v eza >/dev/null; then
-  alias ls="eza -F"
-  alias tree="eza --tree"
+  alias ls="eza --classify=auto"
+  alias ll="ls --long"
+  alias la="ls --all"
+  alias tree="ls --tree"
 else
   alias ls="ls -F --color=auto"
+  alias ll="ls -l"
+  alias la="ls -a"
 fi
-alias ll="ls -l"
-alias la="ls -a"
 
 if command -v nvim >/dev/null; then
   EDITOR="nvim"
